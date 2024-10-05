@@ -46,8 +46,18 @@ class User extends ResourceController
     public function create()
     {
         $data=$this->request->getJSON(true);
-        if($this->model->insert($data)){
-        return  $this->respondCreated($data,'Usuario creado');
+
+        
+        if($this->model->insert([
+            'Id'=>$data['Id'],
+            'Password'=>password_hash($data['Password'],PASSWORD_DEFAULT),
+            'Name_user'=>$data['Name_user'],
+            'Last_name'=>$data['Last_name'],
+            'Phome_number'=>$data['Phome_number'],
+            'Rol_id'=>"2"            
+        ])){
+            $mensaje=['message'=>'Usuario creado'];
+        return  $this->respondCreated([$data,$mensaje],'Usuario creado');
         }
         return $this->failValidationErrors($this->model->errors());
     }
@@ -95,9 +105,4 @@ class User extends ResourceController
           return $this->failNotFound('Usuario no encontrado '.$id);
     }
 
-    public function login(){
-        
-        $data=$this->request->getJSON(true);
-        return print_r($data);
-    }
 }

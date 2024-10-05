@@ -7,30 +7,31 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
     protected $table            = 'users';
-    protected $primaryKey       = 'Cedula';
+    protected $primaryKey       = 'Id';
     protected $useAutoIncrement = false;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Cedula','Password','Name_user','Last_name','Phome_number','Rol_id','imagen'];
+    protected $allowedFields    = ['Id','Password','Name_user','Last_name','Phome_number','Rol_id'];        
 
  
-/*     // Dates
+   // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
- */
+    protected $createdField  = 'Created_at';
+   
     // Validation
     protected $validationRules      = [
-        'Cedula' => 'required|is_unique[users.Cedula]',
-        'Password' => 'required',
-        'Name_user' => 'required',
-        'Last_name' => 'required',
-        'Phome_number' => 'required',
+        'Id' => 'required|is_unique[users.Id]|integer|max_length[10]',
+        'Password' => 'required|min_length[8]',
+        'Name_user' => 'required|max_length[30]',
+        'Last_name' => 'required|max_length[30]',
+        'Phome_number' => 'required|max_length[15]',
         'Rol_id' => 'required|integer',
     ];
   
-
+    public function login($id){
+        // Consulta a la base de datos de los Usuarios
+        return $this->select('*')->where('Id',$id)->findAll();        
+    }
 }
