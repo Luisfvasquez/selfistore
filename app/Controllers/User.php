@@ -47,7 +47,10 @@ class User extends ResourceController
     {
         $data=$this->request->getJSON(true);
         
-        
+        if(empty($data['Password'])) {
+            return $this->respond('Password requerido');
+        }
+
         if($this->model->insert([
             'Id'=>$data['Id'],
             'Password'=>password_hash($data['Password'],PASSWORD_DEFAULT),
