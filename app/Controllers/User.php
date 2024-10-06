@@ -46,7 +46,7 @@ class User extends ResourceController
     public function create()
     {
         $data=$this->request->getJSON(true);
-
+        
         
         if($this->model->insert([
             'Id'=>$data['Id'],
@@ -54,6 +54,7 @@ class User extends ResourceController
             'Name_user'=>$data['Name_user'],
             'Last_name'=>$data['Last_name'],
             'Phome_number'=>$data['Phome_number'],
+            'Email'=>$data['Email'],
             'Rol_id'=>"2"            
         ])){
             $mensaje=['message'=>'Usuario creado'];

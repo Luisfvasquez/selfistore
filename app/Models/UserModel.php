@@ -12,7 +12,7 @@ class UserModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Id','Password','Name_user','Last_name','Phome_number','Rol_id'];        
+    protected $allowedFields    = ['Id','Password','Name_user','Last_name','Phome_number','Email','Rol_id'];        
 
  
    // Dates
@@ -27,7 +27,8 @@ class UserModel extends Model
         'Name_user' => 'required|max_length[30]',
         'Last_name' => 'required|max_length[30]',
         'Phome_number' => 'required|max_length[15]',
-        'Rol_id' => 'required|integer',
+        'Email' => 'required|valid_email',
+        'Rol_id' => 'required|integer'
     ];
   
     public function login($id){
