@@ -7,6 +7,6 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-$routes->resource('user',['except'=>'new,edit']);
-$routes->post('auth','Login::auth');
-$routes->post('logout','Login::logout');
+$routes->resource('user',['except'=>'new,edit','filter'=>'cors']);
+$routes->post('auth','Login::auth',['filter'=>'cors']);
+$routes->post('logout','Login::logout',['filter'=>'cors']);
