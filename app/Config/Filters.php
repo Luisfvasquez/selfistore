@@ -33,7 +33,8 @@ class Filters extends BaseFilters
         'cors'          => Cors::class,
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
-        'performance'   => PerformanceMetrics::class,        
+        'performance'   => PerformanceMetrics::class,
+        'cors' => \Fluent\Cors\Filters\CorsFilter::class,
     ];
 
     /**
@@ -104,8 +105,6 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [ 
-        'cors' => [
-            'before' => ['/*'],
-            'after' => ['/*']]        
+        'cors' => ['after' => ['/*']],        
     ];
 }

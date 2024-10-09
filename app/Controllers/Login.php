@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
-use CodeIgniter\HTTP\Cors;
+
 
 class Login extends ResourceController
 {

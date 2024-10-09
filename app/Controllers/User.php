@@ -10,6 +10,7 @@ class User extends ResourceController
 {
     protected $modelName = 'App\Models\UserModel';
     protected $format    = 'json'; 
+    private $contador = 0;
     
     /**
      * Return an array of resource objects, themselves in array format.
@@ -18,6 +19,10 @@ class User extends ResourceController
      */
     public function index()
     {
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+       
         $users=$this->model->findAll();
         return $this->respond($users);
     }
@@ -31,6 +36,10 @@ class User extends ResourceController
      */
     public function show($id = null)
     {
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+       
         $users=$this->model->find($id);
         if($users){
             return $this->respond($users);
@@ -46,12 +55,18 @@ class User extends ResourceController
      */
     public function create()
     {
-        $data=$this->request->getJSON(true);
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
         
+        
+        $data=$this->request->getJSON(true);
+       
         if(empty($data['Password'])) {
             return $this->respond('Password requerido');
         }
-
+       
         if($this->model->insert([
             'Id'=>$data['Id'],
             'Password'=>password_hash($data['Password'],PASSWORD_DEFAULT),
@@ -60,11 +75,39 @@ class User extends ResourceController
             'Phome_number'=>$data['Phome_number'],
             'Email'=>$data['Email'],
             'Rol_id'=>"2"            
-        ])){
-            $mensaje=['message'=>'Usuario creado'];
+        ])){            
+            $mensaje=['message'=>'Usuario Creado'];
         return  $this->respondCreated([$data,$mensaje],'Usuario creado');
         }
         return $this->failValidationErrors($this->model->errors());
+      
+        /* 
+         if (empty($data['Password'])) {
+            return $this->respond('Password requerido');
+        }
+        try {
+
+            if ($this->model->insert([
+                'Id' => $data['Id'],
+                'Password' => password_hash($data['Password'], PASSWORD_DEFAULT),
+                'Name_user' => $data['Name_user'],
+                'Last_name' => $data['Last_name'],
+                'Phome_number' => $data['Phome_number'],
+                'Email' => $data['Email'],
+                'Rol_id' => "2"
+            ])) {
+                $mensaje = ['message' => 'Usuario Creado'];
+                return  $this->respondCreated([$data, $mensaje], 'Usuario creado');
+            }
+            return $this->failValidationErrors($this->model->errors());
+        } catch (\Exception $e) {
+            return $this->failServerError('Error en el servidor');
+        }
+        */
+
+
+
+
     }
 
 
@@ -77,6 +120,11 @@ class User extends ResourceController
      */
     public function update($id = null)
     {
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'PUT, OPTIONS');
+        $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+       
         $user=$this->model->find($id);
 
         if(!$user){
@@ -100,6 +148,11 @@ class User extends ResourceController
      */
     public function delete($id = null)
     {
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'DELETE, OPTIONS');
+        $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        
         $user=$this->model->find($id);
 
         if($user){

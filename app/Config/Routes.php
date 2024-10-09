@@ -1,7 +1,7 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
-
+use CodeIgniter\Filters\Cors;
 /**
  * @var RouteCollection $routes
  */
