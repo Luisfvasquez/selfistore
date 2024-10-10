@@ -9,10 +9,10 @@ class ProductsModel extends Model
     protected $table            = 'products';
     protected $primaryKey       = 'IdProduct';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
+    protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Category_id ','Name_product','Description','Image','Status'];
+    protected $allowedFields    = ['Category_id','Name_product','Description','Image','Status'];
     
     // Dates
     protected $useTimestamps = false;
@@ -22,12 +22,11 @@ class ProductsModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [
-        'Category_id'=>'required',
-        'Name_product'=>'required',
+    protected $validationRules      = [       
+        'Category_id'=>'required|integer',
+        'Name_product'=>'required|string',
         'Description'=>'required',
-        'Image'=>'required',
-        'Status'=>'required'
+        'Status'=>'required|integer'
     ];  
 
 }
