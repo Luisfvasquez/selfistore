@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\InventarioModel;
+use App\Models\ImageModel;
 use App\Models\InventoriesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -120,23 +120,24 @@ class Products extends ResourceController
 
         $file=$this->request->getFile('file');        
        
-       /*  $reglas=[
-            'file'=>'uploaded[file]|max_size[file,1024]|ext_in[file,jpg,jpeg,png]'
-        ];
-
-        if(!$this->validate($reglas)){
-            return $this->failValidationErrors($this->validator->getErrors());
-        }
- */
+      
         if(!$file->isValid()){
            
             return $this->fail('No se ha podido subir el archivo');
         }
         if(!$file->hasMoved()){
             $ruta= ROOTPATH.'public/ImageProducts';
-            $file->move($ruta, $file->getName());
+            $file->move($ruta, $file->getName(),true);
         }
-
-        
+        $imageModel = new ImageModel();
+        $id=$this->request->getPost('Id');
+        $data=[
+            'Products_id'=>$id,
+            'Url'=>'public/ImageProducts/',
+            'Name'=>$file->getName()
+        ];
+       
+        $imageModel->insert($data);
+        return $this->respondCreated($data,'Imagen subida');       
     }
 }
