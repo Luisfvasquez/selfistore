@@ -4,16 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProductsModel extends Model
+class CategoriesModel extends Model
 {
-    protected $table            = 'products';
-    protected $primaryKey       = 'IdProduct';
+    protected $table            = 'categories';
+    protected $primaryKey       = 'IdCategory';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Category_id','Name_product','Description','Image','Status0','Price'];
-    
+    protected $allowedFields    = ['Name_category'];
+ 
     // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
@@ -22,12 +22,6 @@ class ProductsModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [       
-        'Category_id'=>'required|integer',
-        'Name_product'=>'required|string',
-        'Description'=>'required',
-        'Status'=>'required|integer'
-        
-    ];  
-
+    protected $validationRules      = ['Name_category' => 'required'];
+  
 }
