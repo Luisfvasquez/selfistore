@@ -12,7 +12,7 @@ class ProductsModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Category_id','Name_product','Description','Image','Status0','Price'];
+    protected $allowedFields    = ['Category_id','Name_product','Description','Image','Status','Price'];
     
     // Dates
     protected $useTimestamps = false;
@@ -26,8 +26,8 @@ class ProductsModel extends Model
         'Category_id'=>'required|integer',
         'Name_product'=>'required|string',
         'Description'=>'required',
-        'Status'=>'required|integer'
-        
+        'Status'=>'required|integer',
+        'Price'=>'required|decimal',
     ];  
 
 }

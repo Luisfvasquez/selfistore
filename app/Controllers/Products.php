@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\InventarioModel;
+use App\Models\InventoriesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\Cors;
@@ -9,7 +11,7 @@ use CodeIgniter\HTTP\Cors;
 class Products extends ResourceController
 {
     protected $modelName = 'App\Models\ProductsModel';
-    protected $format    = 'json'; 
+    protected $format    = 'json';
     /**
      * Return an array of resource objects, themselves in array format.
      *
@@ -17,12 +19,12 @@ class Products extends ResourceController
      */
     public function index()
     {
-        
+
         $this->response->setHeader('Content-Type', 'application/json');
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-       
-        $products=$this->model->findAll();
+
+        $products = $this->model->findAll();
         return $this->respond($products);
     }
 
@@ -39,14 +41,14 @@ class Products extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
-        $data=$this->model->find($id);
-        if($data){
+        $data = $this->model->find($id);
+        if ($data) {
             return $this->respond($data);
         }
-        return $this->failNotFound('Producto no encontrado '.$id);
+        return $this->failNotFound('Producto no encontrado ' . $id);
     }
 
-   
+
     /**
      * Create a new resource object, from "posted" parameters.
      *
@@ -58,22 +60,28 @@ class Products extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
         $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    
-        
-        $data=$this->request->getJSON(true);       
-         
-        if($this->model->insert([           
-            'Category_id'=>$data['Category_id'],            
-            'Name_product'=>$data['Name_product'],
-            'Description'=>$data['Description'],
-            'Image'=>$data['Image'],
-            'Status'=>$data['Status'],
-            'Price'=>$data['Price'],
-        ])){
-            $mensaje=['message'=>'Producto Creado'];
-        return  $this->respondCreated([$data,$mensaje],'Producto creado');
+
+        $inventarioModel = new InventoriesModel();
+        $data = $this->request->getJSON(true);
+        if ($this->model->insert([
+            'Category_id' => $data['Category_id'],
+            'Name_product' => $data['Name_product'],
+            'Description' => $data['Description'],
+            'Image' => $data['Image'],
+            'Status' => $data['Status'],
+            'Price' => $data['Price']
+        ])) {
+            $idproducto = $this->model->insertID();
+
+            if ($inventarioModel->insert([
+                'Product_id' => $idproducto,
+                'Amount_inventory' => $data['Amount_inventory']
+            ])) {
+                $mensaje = ['message' => 'Producto Creado'];
+                return  $this->respondCreated([$data, $mensaje], 'Producto creado');
+            }
         }
-        
+
         return $this->failValidationErrors($this->model->errors());
     }
 
@@ -90,19 +98,45 @@ class Products extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'PUT, OPTIONS');
         $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-       
-        $product=$this->model->find($id);
 
-        if(!$product){
-            return $this->failNotFound('Producto no encontrado '.$id);
+        $product = $this->model->find($id);
+
+        if (!$product) {
+            return $this->failNotFound('Producto no encontrado ' . $id);
         }
-        $data=$this->request->getJSON(true);
-        if( $this->model->update($id,$data)){
-            return $this->respondUpdated($data,'Producto actualizado');
+        $data = $this->request->getJSON(true);
+        if ($this->model->update($id, $data)) {
+            return $this->respondUpdated($data, 'Producto actualizado');
         }
-      
+
         return $this->failValidationErrors($this->model->errors());
     }
 
-   
+    public function UploadImage(){
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+        $file=$this->request->getFile('file');        
+       
+       /*  $reglas=[
+            'file'=>'uploaded[file]|max_size[file,1024]|ext_in[file,jpg,jpeg,png]'
+        ];
+
+        if(!$this->validate($reglas)){
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
+ */
+        if(!$file->isValid()){
+           
+            return $this->fail('No se ha podido subir el archivo');
+        }
+        if(!$file->hasMoved()){
+            $ruta= ROOTPATH.'public/ImageProducts';
+            $file->move($ruta, $file->getName());
+        }
+
+        
+    }
 }
