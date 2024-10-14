@@ -129,32 +129,4 @@ class Products extends ResourceController
         return $this->failValidationErrors($this->model->errors());
     }
 
-    public function UploadImage(){
-        $this->response->setHeader('Content-Type', 'application/json');
-        $this->response->setHeader('Access-Control-Allow-Origin', '*');
-        $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-        $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-        $file=$this->request->getFile('file');        
-       
-      
-        if(!$file->isValid()){
-           
-            return $this->fail('No se ha podido subir el archivo');
-        }
-        if(!$file->hasMoved()){
-            $ruta= ROOTPATH.'public/ImageProducts';
-            $file->move($ruta, $file->getName(),true);
-        }
-        $imageModel = new ImageModel();
-        $id=$this->request->getPost('Id');
-        $data=[
-            'Products_id'=>$id,
-            'Url'=>'public/ImageProducts/',
-            'Name'=>$file->getName()
-        ];
-       
-        $imageModel->insert($data);
-        return $this->respondCreated($data,'Imagen subida');       
-    }
 }
