@@ -63,8 +63,19 @@ class User extends ResourceController
         
         $data=$this->request->getJSON(true);
        
-        if(empty($data['Password'])) {
-            return $this->respond('Password requerido');
+        $requiredFields = [
+            'Id' => 'El campo Id requerido',
+            'Password' => 'El campo Password requerido',
+            'Name_user' => 'El campo Name_user requerido',
+            'Email' => 'El campo Email requerido',
+            'Phome_number' => 'El campo Phome_number requerido',
+            'Rol_id' => 'El campo Rol_id requerido'
+        ];
+        
+        foreach ($requiredFields as $field => $errorMessage) {
+            if (empty($data[$field])) {
+                return $this->respond($errorMessage);
+            }
         }
        
         if($this->model->insert([

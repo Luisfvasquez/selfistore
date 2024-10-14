@@ -62,6 +62,10 @@ class Categories extends ResourceController
         
         $data=$this->request->getJSON(true);
      
+        if(empty($data['Name_category'])) {
+            return $this->respond(' El campo Id requerido');
+        }
+        
         if($this->model->insert($data)){            
             $mensaje=['message'=>'Categoria Creada'];
         return  $this->respondCreated([$data,$mensaje],'Categoria creada');

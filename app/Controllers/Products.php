@@ -63,6 +63,23 @@ class Products extends ResourceController
 
         $inventarioModel = new InventoriesModel();
         $data = $this->request->getJSON(true);
+
+        $requiredFields = [
+            'Category_id' => 'El campo Category_id requerido',
+            'Name_product' => 'El campo Name_product requerido',
+            'Description' => 'El campo Description requerido',
+            'Image' => 'El campo Image requerido',
+            'Status' => 'El campo Status requerido',
+            'Price' => 'El campo Price requerido'
+        ];
+        
+        foreach ($requiredFields as $field => $errorMessage) {
+            if (empty($data[$field])) {
+                return $this->respond($errorMessage);
+            }
+        }
+
+        
         if ($this->model->insert([
             'Category_id' => $data['Category_id'],
             'Name_product' => $data['Name_product'],

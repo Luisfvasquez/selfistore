@@ -27,6 +27,18 @@ class Login extends ResourceController
     {
         $data=$this->request->getJSON(true);
 
+        $requiredFields = [
+            'Id' => 'El campo Id requerido',
+            'Password' => 'El campo Password requerido'
+        ];
+        
+        foreach ($requiredFields as $field => $errorMessage) {
+            if (empty($data[$field])) {
+                return $this->respond($errorMessage);
+            }
+        }
+
+
         $rules=[
             'Id'=>'required',
             'Password'=>'required'
