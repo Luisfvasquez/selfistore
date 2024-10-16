@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\ProductsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -23,7 +24,14 @@ class Image extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
         $images = $this->model->findAll();
-        return $this->respond($images);
+        $data=[            
+                "IdImage"=> $images[0]->IdImage,
+                "Products_id"=> $images[0]->Products_id,
+                "Url"=> $images[0]->Url,
+                "Name"=> $images[0]->Name              
+        ];
+
+        return $this->respond($data);
     }
 
     /**
@@ -79,13 +87,22 @@ class Image extends ResourceController
         }
       
         $id=$this->request->getPost('Id');
+        $url='public/ImageProducts/'.$file->getName();
+
+        
         $data=[
             'Products_id'=>$id,
-            'Url'=>'public/ImageProducts/',
-            'Name'=>$file->getName()
+            'Url'=>$url
         ];
+
+        $producModel= new ProductsModel();
+        $producModel->update($id,[
+            'Image'=> $id,
+        ]);
+
+
        
-        $this->model->insert($data);
+
         return $this->respondCreated($data,'Imagen subida');       
     }
 

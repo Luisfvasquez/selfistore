@@ -24,7 +24,20 @@ class Products extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
-        $products = $this->model->findAll();
+        $data = $this->model->ProductsImage();
+
+        foreach($data as $datos){          
+               $products[]=[
+                'IdProduct'=> $datos->IdProduct,
+                'Category_id' => $datos->Category_id,
+                'Name_product' => $datos->Name_product,
+                'Description' => $datos->Description,
+                'Status' => $datos->Status,
+                'Price' => $datos->Price,
+                'Url'=> ROOTPATH.$datos->imagen_url   
+               ];
+        }
+        
         return $this->respond($products);
     }
 
@@ -40,6 +53,8 @@ class Products extends ResourceController
         $this->response->setHeader('Content-Type', 'application/json');
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+
+        
 
         $data = $this->model->find($id);
         if ($data) {
@@ -68,7 +83,7 @@ class Products extends ResourceController
             'Category_id' => 'El campo Category_id requerido',
             'Name_product' => 'El campo Name_product requerido',
             'Description' => 'El campo Description requerido',
-            'Image' => 'El campo Image requerido',
+            'Amount_inventory' => 'El campo Description requerido',
             'Status' => 'El campo Status requerido',
             'Price' => 'El campo Price requerido'
         ];
@@ -89,7 +104,7 @@ class Products extends ResourceController
             'Price' => $data['Price']
         ])) {
             $idproducto = $this->model->insertID();
-
+            
             if ($inventarioModel->insert([
                 'Product_id' => $idproducto,
                 'Amount_inventory' => $data['Amount_inventory']

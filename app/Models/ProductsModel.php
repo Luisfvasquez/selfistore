@@ -29,5 +29,11 @@ class ProductsModel extends Model
         'Status'=>'required|integer',
         'Price'=>'required|decimal',
     ];  
+    public function ProductsImage(){
+        return $this->select('products.*, MAX(image.url) as imagen_url')
+        ->join('image', 'products.IdProduct = image.Products_id', 'LEFT')
+        ->groupBy('products.IdProduct')
+        ->findAll();
+    }
 
 }

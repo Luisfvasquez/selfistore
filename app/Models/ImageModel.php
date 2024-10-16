@@ -12,14 +12,13 @@ class ImageModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Products_id','Url','Name'];
+    protected $allowedFields    = ['Products_id','Url'];
 
 
     // Validation
     protected $validationRules= [
         'Products_id'=>'required',
         'Url'=>'required',
-        'Name'=>'required',
     ];
     
 }
