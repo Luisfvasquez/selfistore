@@ -72,8 +72,10 @@ class Image extends ResourceController
             return $this->fail('Falta el campo Id');
         }
 
-            $file=$this->request->getFile('file1');     
-
+        for($i=1;$i<=5;$i++){
+            $archivos= "file".$i;        
+            $file=$this->request->getFile($archivos);     
+    
             if(empty($file)){
                 return $this->fail('No se ha subido ningun archivo');
             }
@@ -81,59 +83,22 @@ class Image extends ResourceController
             if(!$file->isValid()){               
                 return $this->fail('No se ha podido subir el archivo');
             }
-
-
+    
+    
             if(!$file->hasMoved()){
                 $ruta= ROOTPATH.'public/ImageProducts';
                 $file->move($ruta, $file->getName(),true);
             }
                
         $url='public/ImageProducts/'.$file->getName();
-
+    
         $data=[
             'Products_id'=>$id,
             'Url'=>$url
         ];
        $this->model->insert($data);
       
-                
-            $file=$this->request->getFile('file2');    
-
-            if(empty($file)){
-                return $this->fail('No se ha subido ningun archivo');
-            }
-           
-            if (!$file->isValid()) {
-                $error = $file->getError();
-                switch ($error) {
-                    case 4:
-                        return $this->fail('No se ha subido ningún archivo');
-                    case 1:
-                        return $this->fail('El archivo es demasiado grande (UPLOAD_ERR_INI_SIZE)');
-                    case 2:
-                        return $this->fail('El archivo es demasiado grande (UPLOAD_ERR_FORM_SIZE)');
-                    // Agrega otros casos según sea necesario
-                    default:
-                        return $this->fail("Error al subir el archivo: $error");
-                }
-            }
-            
-            // Si el archivo es válido, procede con el procesamiento
-
-            if(!$file->hasMoved()){
-                $ruta= ROOTPATH.'public/ImageProducts';
-                $file->move($ruta, $file->getName(),true);
-            }
-               
-        $url='public/ImageProducts/'.$file->getName();
-
-        $data=[
-            'Products_id'=>$id,
-            'Url'=>$url
-        ];
-       $this->model->insert($data);
-      
-                
+        }
         
         $producModel= new ProductsModel();
         $producModel->update($id,[

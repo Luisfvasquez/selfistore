@@ -34,7 +34,7 @@ class Products extends ResourceController
                 'Description' => $datos->Description,
                 'Status' => $datos->Status,
                 'Price' => $datos->Price,
-                'Url'=> ROOTPATH.$datos->imagen_url   
+                'Url'=> $datos->imagen_url   
                ];
         }
         
