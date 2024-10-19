@@ -66,44 +66,81 @@ class Image extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
         $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-        $file=$this->request->getFile('file');        
-       
-        if(empty($file)){
-            return $this->fail('No se ha subido ningun archivo');
-        }
+   
+        $id=$this->request->getPost('Id');
         if(empty($_POST['Id'])){
             return $this->fail('Falta el campo Id');
         }
 
-        if(!$file->isValid()){
+            $file=$this->request->getFile('file1');     
+
+            if(empty($file)){
+                return $this->fail('No se ha subido ningun archivo');
+            }
            
-            return $this->fail('No se ha podido subir el archivo');
-        }
-        
-        if(!$file->hasMoved()){
-            $ruta= ROOTPATH.'public/ImageProducts';
-            $file->move($ruta, $file->getName(),true);
-        }
-      
-        $id=$this->request->getPost('Id');
+            if(!$file->isValid()){               
+                return $this->fail('No se ha podido subir el archivo');
+            }
+
+
+            if(!$file->hasMoved()){
+                $ruta= ROOTPATH.'public/ImageProducts';
+                $file->move($ruta, $file->getName(),true);
+            }
+               
         $url='public/ImageProducts/'.$file->getName();
 
-        
         $data=[
             'Products_id'=>$id,
             'Url'=>$url
         ];
+       $this->model->insert($data);
+      
+                
+            $file=$this->request->getFile('file2');    
 
+            if(empty($file)){
+                return $this->fail('No se ha subido ningun archivo');
+            }
+           
+            if (!$file->isValid()) {
+                $error = $file->getError();
+                switch ($error) {
+                    case 4:
+                        return $this->fail('No se ha subido ningún archivo');
+                    case 1:
+                        return $this->fail('El archivo es demasiado grande (UPLOAD_ERR_INI_SIZE)');
+                    case 2:
+                        return $this->fail('El archivo es demasiado grande (UPLOAD_ERR_FORM_SIZE)');
+                    // Agrega otros casos según sea necesario
+                    default:
+                        return $this->fail("Error al subir el archivo: $error");
+                }
+            }
+            
+            // Si el archivo es válido, procede con el procesamiento
+
+            if(!$file->hasMoved()){
+                $ruta= ROOTPATH.'public/ImageProducts';
+                $file->move($ruta, $file->getName(),true);
+            }
+               
+        $url='public/ImageProducts/'.$file->getName();
+
+        $data=[
+            'Products_id'=>$id,
+            'Url'=>$url
+        ];
+       $this->model->insert($data);
+      
+                
+        
         $producModel= new ProductsModel();
         $producModel->update($id,[
             'Image'=> $id,
         ]);
 
-
-       
-
-        return $this->respondCreated($data,'Imagen subida');       
+        return $this->respondCreated("Imagenes Subidas",'Imagen subida');       
     }
 
 
@@ -159,4 +196,32 @@ class Image extends ResourceController
 
           return $this->failNotFound('Imagen no encontrada '.$id);
     }
+
+   /*  for($i=1;$i<=5;$i++){
+        $archivos= "file" . $i;        
+        $file=$this->request->getFile($archivos);     
+
+        if(empty($file)){
+            return $this->fail('No se ha subido ningun archivo');
+        }
+       
+        if(!$file->isValid()){               
+            return $this->fail('No se ha podido subir el archivo');
+        }
+
+
+        if(!$file->hasMoved()){
+            $ruta= ROOTPATH.'public/ImageProducts';
+            $file->move($ruta, $file->getName(),true);
+        }
+           
+    $url='public/ImageProducts/'.$file->getName();
+
+    $data=[
+        'Products_id'=>$id,
+        'Url'=>$url
+    ];
+   $this->model->insert($data);
+  
+    }     */    
 }
