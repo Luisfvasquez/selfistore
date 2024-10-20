@@ -57,8 +57,9 @@ class Products extends ResourceController
         
 
         $data = $this->model->find($id);
+        $image=$this->model->ProductsImageById($id);
         if ($data) {
-            return $this->respond($data);
+            return $this->respond([$data,$image]);
         }
         return $this->failNotFound('Producto no encontrado ' . $id);
     }

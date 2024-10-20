@@ -36,4 +36,11 @@ class ProductsModel extends Model
         ->findAll();
     }
 
+    public function ProductsImageById($id){
+        return $this->select('image.url as Images')
+        ->join('image', 'products.IdProduct = image.Products_id', 'LEFT')
+        ->where('products.IdProduct', $id)
+        ->findAll();
+    }
+
 }
