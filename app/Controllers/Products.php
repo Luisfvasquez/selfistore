@@ -58,6 +58,10 @@ class Products extends ResourceController
 
         $data = $this->model->find($id);
         $image=$this->model->ProductsImageById($id);
+        $productsRelation=$this->model->ProductsRelation($data->Category_id,$id);
+        if ($productsRelation) {
+            return $this->respond([$data,$image,$productsRelation]);
+        } 
         if ($data) {
             return $this->respond([$data,$image]);
         }

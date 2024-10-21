@@ -43,4 +43,9 @@ class ProductsModel extends Model
         ->findAll();
     }
 
+    public function ProductsRelation($category,$id){
+        return $this->select('*')->where('Category_id', $category)->whereNotIn('IdProduct',[$id])->findAll();
+      
+    }
+
 }
