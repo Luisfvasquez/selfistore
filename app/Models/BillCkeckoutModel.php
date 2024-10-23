@@ -4,17 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BillModel extends Model
+class BillCkeckoutModel extends Model
 {
-    protected $table            = 'bill';
-    protected $primaryKey       = 'IdBill';
+    protected $table            = 'bill_checkout';
+    protected $primaryKey       = 'Bill_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['User_id','Date','reference','Status'];
+    protected $allowedFields    = ['Bill_id','User_id','Capture'];
 
- 
     // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
@@ -24,10 +23,9 @@ class BillModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'User_id' => 'required',
-        'Date' => 'required',
-        'reference' => 'required',
-        'Status' => 'required'
+        'Bill_id'=>'required|integer',
+        'User_id'=>'required|integer',
+        'Capture'=>'required|string',
     ];
-  
+   
 }

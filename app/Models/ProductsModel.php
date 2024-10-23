@@ -36,6 +36,14 @@ class ProductsModel extends Model
         ->findAll();
     }
 
+    public function ProductsImageShow($id){
+        return $this->select('products.*, MAX(image.url) as imagen_url')
+        ->join('image', 'products.IdProduct = image.Products_id', 'LEFT')
+        ->groupBy('products.IdProduct')
+        ->where('products.IdProduct', $id)
+        ->findAll();
+    }
+
     public function ProductsImageById($id){
         return $this->select('image.url as Images')
         ->join('image', 'products.IdProduct = image.Products_id', 'LEFT')
@@ -43,8 +51,10 @@ class ProductsModel extends Model
         ->findAll();
     }
 
-    public function ProductsRelation($category,$id){
-        return $this->select('*')->where('Category_id', $category)->whereNotIn('IdProduct',[$id])->findAll();
+    public function ProductsRelation($category,$id){    
+        return $this->select('products.*, MAX(image.url) as imagen_url')
+        ->join('image', 'products.IdProduct = image.Products_id', 'LEFT')
+        ->groupBy('products.IdProduct')->where('Category_id', $category)->whereNotIn('IdProduct',[$id])->findAll();
       
     }
 
