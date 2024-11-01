@@ -78,7 +78,6 @@ class Products extends ResourceController
             'Image'=> $products[0]->imagen_url,
             'Amount_inventory' => $inventario[0]->Amount_inventory  
            ];
-           return $this->respond($data);
 
         $image=$this->model->ProductsImageById($id);
         
