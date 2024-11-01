@@ -28,4 +28,7 @@ class InventoriesModel extends Model
         'Amount_inventory'=>'required|integer',
     ];
     
+    public function InventoriesAmount(){
+        return $this->select('Amount_inventory')->findAll();
+    }
 }

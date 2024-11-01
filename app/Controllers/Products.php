@@ -25,17 +25,24 @@ class Products extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
         $data = $this->model->ProductsImage();
+        $inventarioModel = new InventoriesModel();
 
-        foreach($data as $datos){          
-               $products[]=[
-                'IdProduct'=> $datos->IdProduct,
-                'Category_id' => $datos->Category_id,
-                'Name_product' => $datos->Name_product,
-                'Description' => $datos->Description,
-                'Status' => $datos->Status,
-                'Price' => $datos->Price,
-                'Url'=> $datos->imagen_url   
-               ];
+        $inventario = $inventarioModel->InventoriesAmount();
+        
+                
+        foreach($data as $datos){    
+            foreach($inventario as $inventarios){
+                $products[]=[
+                    'IdProduct'=> $datos->IdProduct,
+                    'Category_id' => $datos->Category_id,
+                    'Name_product' => $datos->Name_product,
+                    'Description' => $datos->Description,
+                    'Status' => $datos->Status,
+                    'Price' => $datos->Price,
+                    'Url'=> $datos->imagen_url,
+                    'Amount_inventory' => $inventarios->Amount_inventory
+                   ];  
+            }           
         }
         
         return $this->respond($products);
