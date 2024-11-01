@@ -31,4 +31,7 @@ class InventoriesModel extends Model
     public function InventoriesAmount(){
         return $this->select('Amount_inventory')->findAll();
     }
+    public function InventoriesAmountid($id){
+        return $this->select('Amount_inventory')->where('Product_id',$id)->findAll();
+    }
 }

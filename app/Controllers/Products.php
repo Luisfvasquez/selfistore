@@ -39,9 +39,10 @@ class Products extends ResourceController
                     'Description' => $datos->Description,
                     'Status' => $datos->Status,
                     'Price' => $datos->Price,
-                    'Url'=> $datos->imagen_url,
+                    'Image'=> $datos->imagen_url,
                     'Amount_inventory' => $inventarios->Amount_inventory
                    ];  
+                  break;
             }           
         }
         
@@ -65,6 +66,8 @@ class Products extends ResourceController
 
         $products = $this->model->ProductsImageShow($id);
 
+        $inventarioModel = new InventoriesModel();
+        $inventario = $inventarioModel->InventoriesAmountid($id);
         $data=[
             'IdProduct'=> $products[0]->IdProduct,
             'Category_id' => $products[0]->Category_id,
@@ -72,9 +75,10 @@ class Products extends ResourceController
             'Description' => $products[0]->Description,
             'Status' => $products[0]->Status,
             'Price' => $products[0]->Price,
-            'Url'=> $products[0]->imagen_url   
+            'Image'=> $products[0]->imagen_url,
+            'Amount_inventory' => $inventario[0]->Amount_inventory  
            ];
-
+           return $this->respond($data);
 
         $image=$this->model->ProductsImageById($id);
         
