@@ -12,7 +12,7 @@ class PaymentmehodBillModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Bill_id','MethodPay_id','Total_amount'];
+    protected $allowedFields    = ['Bill_id','Total_amount'];
 
     // Dates
     protected $useTimestamps = false;
@@ -23,8 +23,7 @@ class PaymentmehodBillModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'Bill_id' => 'required',
-        'MethodPay_id' => 'required',
+        'Bill_id' => 'required',      
         'Total_amount' => 'required'
     ];
   

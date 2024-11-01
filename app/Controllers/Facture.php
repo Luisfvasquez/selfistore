@@ -9,6 +9,7 @@ use App\Models\InventoriesModel;
 use App\Models\PaymentmehodBillModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use PhpParser\Node\Stmt\Echo_;
 
 class Facture extends ResourceController
 {
@@ -73,35 +74,46 @@ class Facture extends ResourceController
             'reference' => $referencia,
             'Status' => 0
         ]);
-        $IdFactura = $this->model->insertID();
+        $idFactura = $this->model->insertID();
 
         $DetallesFacturaModel = new BillDetailsModel();
-
-        $DetallesFacturaModel->insert([
-            'Bill_Id' => $IdFactura,
-            'Product_Id' => $data['Product_Id'],
-            'Amount_product' => $data['Amount_product'],
-            'Price_unitary' => $data['Price_unitary']
-        ]);
+        foreach ($data['Products'] as $producto) {
+            $DetallesFacturaModel->insert([
+                'Bill_Id' => $idFactura,
+                'Product_Id' => $producto['Product_id'],
+                'Amount_product' => $producto['Amount_product'],
+                'Price_unitary' => $producto['Price_unitary']
+            ]);
+        }
 
         $MetodoPagoModel = new PaymentmehodBillModel();
+        $monto_total = 0;
+
+        foreach ($data['Products'] as $producto) {
+            $monto_total += $producto['Price_unitary'] * $producto['Amount_product'];
+        }
+
         $MetodoPagoModel->insert([
-            'Bill_id' => $IdFactura,
-            'MethodPay_id' => $data['MethodPay_id'],
-            'Total_amount' => $data['Total_amount']
+            'Bill_id' => $idFactura,
+            'Total_amount' => $monto_total,
         ]);
+
 
         $RegistroInventarioModel = new InventoriesModel();
 
-        $cantidad = $RegistroInventarioModel->find($data['Product_Id'])->Amount_inventory;
+       
 
-        $RegistroInventarioModel->update(
-            $data['Product_Id'],
-            [
-                'Amount_inventory' => $cantidad - $data['Amount_product']
-            ]
-        );
+        foreach ($data['Products'] as $producto) { 
+            $cantidad = $RegistroInventarioModel->find($producto['Product_id'])->Amount_inventory;          
+            $RegistroInventarioModel->update(
+                $producto['Product_id'],
+                [
+                    'Amount_inventory' => $cantidad - $producto['Amount_product']
+                ]
+            );    
+        }
 
+        array_push($data['Products'], ['Total_amount' => $monto_total]);
         return $this->respondCreated($data, 'Factura creada');
     }
 
@@ -178,38 +190,37 @@ class Facture extends ResourceController
             'Capture' => $url
         ];
 
-        $captureMOdel= new BillCkeckoutModel();
+        $captureMOdel = new BillCkeckoutModel();
 
         $captureMOdel->insert($data);
 
         return $this->respondCreated("Imagenes Subidas", 'Imagen subida');
     }
 
-    public function VerifyFacture() {
-     
+    public function VerifyFacture()
+    {
+
         $this->response->setHeader('Content-Type', 'application/json');
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
         $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-        
-    
-        $idFactura = $this->request->getPost('IdFactura');
-        $checkout = $this->request->getPost('checkout');
-    
-     
+
+        $data = $this->request->getJSON(true);
+        $idFactura = $data['IdFactura'];
+        $checkout = $data['checkout'];
+
+
         if (empty($idFactura) || empty($checkout)) {
             return $this->failValidationErrors('IdFactura y checkout son requeridos');
         }
-    
-      
+
+
         $facturaModel = new BillModel();
-    
+
         if ($facturaModel->update($idFactura, ['Status' => $checkout])) {
-            return $this->respond(['message' => 'Factura actualizada'], 200);
+            return $this->respondUpdated('Factura actualizada');
         } else {
             return $this->fail('Error al actualizar la factura');
         }
     }
-
-    
 }
