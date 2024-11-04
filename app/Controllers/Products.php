@@ -41,9 +41,9 @@ class Products extends ResourceController
                     'Price' => $datos->Price,
                     'Image'=> $datos->imagen_url,
                     'Amount_inventory' => $inventarios->Amount_inventory
-                   ];  
-                  break;
-            }           
+                   ]; 
+            } 
+            break;          
         }
         
         return $this->respond($products);
