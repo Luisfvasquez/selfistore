@@ -68,8 +68,7 @@ class User extends ResourceController
             'Password' => 'El campo Password requerido',
             'Name_user' => 'El campo Name_user requerido',
             'Email' => 'El campo Email requerido',
-            'Phome_number' => 'El campo Phome_number requerido',
-            'Rol_id' => 'El campo Rol_id requerido'
+            'Phome_number' => 'El campo Phome_number requerido'
         ];
         
         foreach ($requiredFields as $field => $errorMessage) {
@@ -115,10 +114,6 @@ class User extends ResourceController
             return $this->failServerError('Error en el servidor');
         }
         */
-
-
-
-
     }
 
 

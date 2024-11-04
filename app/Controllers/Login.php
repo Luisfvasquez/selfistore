@@ -76,11 +76,29 @@ class Login extends ResourceController
             return $this->respond($mensaje);              
     }
 
-    public function logout(){
-      if($this->session->get('logged_id')){
-          $this->session->destroy();
-          $mensaje=['message'=>'Sesión cerrada'];
-          return $this->respond($mensaje);
-      }
+    public function logout()
+{
+    // Obtener el ID del usuario desde la solicitud
+    $data = $this->request->getJSON(true);
+    
+    // Verificar que el ID del usuario esté presente
+    if (empty($data['Id'])) {
+        return $this->respond(['Errors' => 'El campo Id es requerido']);
     }
+
+    // Comprobar si hay una sesión activa
+    if ($this->session->get('logged_id')) {
+        // Verificar si el ID de la sesión coincide con el ID del usuario que se quiere desconectar
+        if ($this->session->get('Id') == $data['Id']) {
+            // Destruir la sesión
+            $this->session->destroy();
+            $mensaje = ['message' => 'Sesión cerrada'];
+            return $this->respond($mensaje);
+        } else {
+            return $this->respond(['Errors' => 'No se puede cerrar sesión para este usuario']);
+        }
+    } else {
+        return $this->respond(['Errors' => 'No hay sesión activa']);
+    }
+}
 }
