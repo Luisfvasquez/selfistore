@@ -31,19 +31,20 @@ class Products extends ResourceController
         
                 
         foreach($data as $datos){    
-            foreach($inventario as $inventarios){
-                $products[]=[
-                    'IdProduct'=> $datos->IdProduct,
-                    'Category_id' => $datos->Category_id,
-                    'Name_product' => $datos->Name_product,
-                    'Description' => $datos->Description,
-                    'Status' => $datos->Status,
-                    'Price' => $datos->Price,
-                    'Image'=> $datos->imagen_url,
-                    'Amount_inventory' => $inventarios->Amount_inventory
-                   ]; 
-            } 
-            break;          
+            foreach($inventario as $inventarios){              
+                    $cantidadNow[] = $inventarios->Amount_inventory;
+            }  
+            $products[]=[
+                'IdProduct'=> $datos->IdProduct,
+                'Category_id' => $datos->Category_id,
+                'Name_product' => $datos->Name_product,
+                'Description' => $datos->Description,
+                'Status' => $datos->Status,
+                'Price' => $datos->Price,
+                'Image'=> $datos->imagen_url,
+                'Amount_inventory' => $cantidadNow[$datos->IdProduct-1]
+               ];           
+        
         }
         
         return $this->respond($products);
