@@ -29,11 +29,13 @@ class Products extends ResourceController
 
         $inventario = $inventarioModel->InventoriesAmount();
         
-                
+        $i=0;    
         foreach($data as $datos){    
+           
             foreach($inventario as $inventarios){              
                     $cantidadNow[] = $inventarios->Amount_inventory;
             }  
+            
             $products[]=[
                 'IdProduct'=> $datos->IdProduct,
                 'Category_id' => $datos->Category_id,
@@ -42,9 +44,9 @@ class Products extends ResourceController
                 'Status' => $datos->Status,
                 'Price' => $datos->Price,
                 'Image'=> $datos->imagen_url,
-                'Amount_inventory' => $cantidadNow[$datos->IdProduct-1]
+                'Amount_inventory' => $cantidadNow[$i]
                ];           
-        
+               $i++;
         }
         
         return $this->respond($products);
