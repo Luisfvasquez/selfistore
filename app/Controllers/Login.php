@@ -25,8 +25,13 @@ class Login extends ResourceController
      */
     public function auth()
     {
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        
         $data=$this->request->getJSON(true);
-
+        
         $requiredFields = [
             'Id' => 'El campo Id requerido',
             'Password' => 'El campo Password requerido'
@@ -76,8 +81,13 @@ class Login extends ResourceController
             return $this->respond($mensaje);              
     }
 
-    public function logout()
-{
+    public function logout(){  
+
+    $this->response->setHeader('Content-Type', 'application/json');
+    $this->response->setHeader('Access-Control-Allow-Origin', '*');
+    $this->response->setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
     // Obtener el ID del usuario desde la solicitud
     $data = $this->request->getJSON(true);
     
