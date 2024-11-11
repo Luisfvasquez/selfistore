@@ -163,13 +163,26 @@ class Products extends ResourceController
         $this->response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
         $product = $this->model->find($id);
+        $inventarioModel = new InventoriesModel();
 
         if (!$product) {
             return $this->failNotFound('Producto no encontrado ' . $id);
         }
         $data = $this->request->getJSON(true);
-        if ($this->model->update($id, $data)) {
-            return $this->respondUpdated($data, 'Producto actualizado');
+        if ($this->model->update($id,[
+            'Category_id' => $data['Category_id'],
+            'Name_product' => $data['Name_product'],
+            'Description' => $data['Description'],
+            'Image' => $id,
+            'Status' => $data['Status'],
+            'Price' => $data['Price']
+        ])) {
+            if($inventarioModel->update($id,[
+                'Product_id' => $id,
+                'Amount_inventory' => $data['Amount_inventory']
+            ])){
+                return $this->respondUpdated($data, 'Producto actualizado');
+            }
         }
 
         return $this->failValidationErrors($this->model->errors());
