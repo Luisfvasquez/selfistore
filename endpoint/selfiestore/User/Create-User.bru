@@ -1,0 +1,22 @@
+meta {
+  name: Create-User
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost/selfistore/public/user
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "Id": "1283",
+      "Password": "12345678",
+      "Name_user": "calito ",
+      "Last_name": "mendoza",
+      "Phome_number": "0421448",
+      "Email": "sd@gmail.com"
+  }
+}

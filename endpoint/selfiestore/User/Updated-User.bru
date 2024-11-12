@@ -1,0 +1,20 @@
+meta {
+  name: Updated-User
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost/selfiestore/public/user/123
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+         "Name_user": "calito 2",
+      "Last_name": "mendoza",
+      "Phome_number": "0421448",
+      "Email": "euryluis@gmail.com"
+  }
+}

@@ -1,0 +1,17 @@
+meta {
+  name: Create-categories
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost/selfiestore/public/categories
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "Name_category":"blancos 0"
+  }
+}

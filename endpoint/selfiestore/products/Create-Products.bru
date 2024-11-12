@@ -1,0 +1,23 @@
+meta {
+  name: Create-Products
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost/selfiestore/public/products
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "Category_id": "1",
+    "Name_product": "jeje",
+    "Description": "lol",
+    "Image":"null",
+    "Status": "1",
+    "Price": "10.00",
+    "Amount_inventory":"10"  
+  }
+}

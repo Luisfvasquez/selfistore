@@ -1,0 +1,17 @@
+meta {
+  name: Upload-image
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost/selfiestore/public/image
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  file1: @file(/C:/Users/wueyl/Pictures/Screenshots/Captura de pantalla (3).png)
+  file2: @file(/C:/Users/wueyl/Pictures/Screenshots/Captura de pantalla (8).png)
+  Id: 1
+}

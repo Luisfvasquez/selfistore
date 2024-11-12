@@ -1,0 +1,29 @@
+meta {
+  name: Registro factura
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost/selfiestore/public/facture
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "User_id": "29813955",
+    "Products":[
+          {
+          "Product_id": "1",
+          "Amount_product": "1",
+          "Price_unitary": "10.00"
+      },
+      {
+          "Product_id": "2",
+          "Amount_product": "1",
+          "Price_unitary": "10.00"
+      }
+    ]
+  }
+}

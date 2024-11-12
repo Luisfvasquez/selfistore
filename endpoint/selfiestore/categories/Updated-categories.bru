@@ -1,0 +1,17 @@
+meta {
+  name: Updated-categories
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost/selfiestore/public/categories/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "Name_category": "Negros marico2s"
+  }
+}

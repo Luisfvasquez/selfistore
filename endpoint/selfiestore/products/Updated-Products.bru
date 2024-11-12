@@ -1,0 +1,21 @@
+meta {
+  name: Updated-Products
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost/selfistore/public/products/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "Category_id": "1",
+    "Name_product": "Overzise",
+    "Description": "pa gente grande ",
+    "Image": null,
+    "Status": "1"  
+  }
+}

@@ -1,0 +1,17 @@
+meta {
+  name: SubirCapture
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost/selfiestore/public/facture/capture
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  IdFactura: 1
+  IdUsuario: 1
+  Capture: @file(C:\Users\wueyl\Pictures\Screenshots\Captura de pantalla (8).png)
+}
