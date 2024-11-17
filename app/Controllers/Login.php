@@ -5,10 +5,11 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
-
+use Firebase\JWT\JWT;
 
 class Login extends ResourceController
 {
+    private $secrect_key = 'ksdfhjlkdashflasudhfjs';
     protected $modelName = 'App\Models\UserModel';
     protected $format    = 'json';
     protected $session;
@@ -60,8 +61,16 @@ class Login extends ResourceController
 
 
             if(password_verify($data['Password'],$user[0]->Password)){
-                /* $mensaje=['message'=>'Usuario autenticado'];
-                $user['message']=$mensaje; */
+
+                $token = $userModel->JWT($user[0]->Id, $user[0]->Name_user); 
+               
+
+                $jwt = JWT::encode($token,$this->secrect_key, 'HS256');
+                
+                $userModel->update($user[0]->Id,
+                 ['token_login' => $jwt,
+                 'token_exp' => $token['exp']]);             
+
 
                 $data=[
                     'logged_id'=>true,
@@ -75,7 +84,9 @@ class Login extends ResourceController
                 $this->session->set($user[0]->Name_user,$user[0]->Id);
                 $this->session->set('logged_id',true);
                 $this->session->set('data',$data);
-                return $this->respond($data);
+                return $this->respond(['message'=>'Usuario autenticado',
+                                        'token'=>$jwt,
+                                        'data'=>$data]);
             }
 
             $mensaje=['Errors'=>'Usuario o contraseña incorrectos'];
@@ -92,7 +103,7 @@ class Login extends ResourceController
     
     // Obtener el ID del usuario desde la solicitud
     $data = $this->request->getJSON(true);
-
+    $userModel = new UserModel();
     $IdCierre= $this->session->get($data['Name_user']);
 
     $datosUsuario= $this->session->get('data');
@@ -106,6 +117,8 @@ class Login extends ResourceController
         if ($IdCierre == $data['Id']) {
             // Destruir la sesión
             $this->session->destroy();
+            $userModel->update($data['Id'],
+            ['token_login' => null]);
             $mensaje = ['message' => 'Sesión cerrada',
                         'usuario'=> $datosUsuario];
             return $this->respond($mensaje);

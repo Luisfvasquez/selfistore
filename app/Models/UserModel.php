@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use Firebase\JWT\JWT;
 
 class UserModel extends Model
 {
@@ -12,7 +13,7 @@ class UserModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Id','Password','Name_user','Last_name','Phome_number','Email','Rol_id'];        
+    protected $allowedFields    = ['Id','Password','Name_user','Last_name','Phome_number','Email','Rol_id','token_login','token_exp'];        
 
  
    // Dates
@@ -34,5 +35,21 @@ class UserModel extends Model
     public function login($id){
         // Consulta a la base de datos de los Usuarios
         return $this->select('*')->where('Id',$id)->findAll();        
+    }
+
+    public function JWT($id, $name)
+    {
+        
+        $token = [
+            'iat' => time(),
+            'exp' => time() + 60 * 60,
+            'data' => [
+                'Id' => $id,
+                'Name_user' => $name
+            ]
+        ];
+
+
+        return $token;
     }
 }

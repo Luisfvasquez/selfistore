@@ -84,7 +84,9 @@ class User extends ResourceController
             'Last_name'=>$data['Last_name'],
             'Phome_number'=>$data['Phome_number'],
             'Email'=>$data['Email'],
-            'Rol_id'=>"2"            
+            'Rol_id'=>"2",
+            'token_login'=>null,
+            'token_exp'=>null            
         ])){            
             $mensaje=['message'=>'Usuario Creado'];
         return  $this->respondCreated([$data,$mensaje],'Usuario creado');
